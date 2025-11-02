@@ -145,7 +145,7 @@
       "tag": "🎯 direct",
       "outbounds": [
         "direct-out",
-        "block",
+        "block-out",
         "✈️ Proxy"
       ],
       "default": "direct-out"
@@ -154,19 +154,19 @@
       "type": "selector",
       "tag": "🛑 block",
       "outbounds": [
-        "block",
+        "block-out",
         "direct-out",
         "✈️ Proxy"
       ],
-      "default": "block"
+      "default": "block-out"
     },
     {
-      "tag": "direct",
-      "type": "direct-out"
+      "tag": "direct-out",
+      "type": "direct"
     },
     {
-      "tag": "block",
-      "type": "block-out"
+      "tag": "block-out",
+      "type": "block"
     }
   ],
   "route": {
