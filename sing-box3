@@ -54,7 +54,7 @@
       {
         "rule_set": "geosite-ads",
         "action": "predefined",
-        "rcode": "SUCCESS"
+        "rcode": "NOERROR"
       },
       {
         "rule_set": "geosite-geolocation-!cn",
