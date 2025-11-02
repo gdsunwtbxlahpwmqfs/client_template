@@ -118,7 +118,7 @@
       "tag": "📱 Telegram",
       "outbounds": [
         "♻️ 自动选择",
-        "🎯 direct",
+        "🎯 Direct",
         "<NODE_REPLACE>"
       ]
     },
@@ -127,7 +127,7 @@
       "tag": "▶️ YouTube",
       "outbounds": [
         "♻️ 自动选择",
-        "🎯 direct",
+        "🎯 Direct",
         "<NODE_REPLACE>"
       ]
     },
@@ -136,13 +136,13 @@
       "tag": "🤖 OpenAI",
       "outbounds": [
         "♻️ 自动选择",
-        "🎯 direct",
+        "🎯 Direct",
         "<NODE_REPLACE>"
       ]
     },
     {
       "type": "selector",
-      "tag": "🎯 direct",
+      "tag": "🎯 Direct",
       "outbounds": [
         "direct-out",
         "block-out",
@@ -152,7 +152,7 @@
     },
     {
       "type": "selector",
-      "tag": "🛑 block",
+      "tag": "🛑 Block",
       "outbounds": [
         "block-out",
         "direct-out",
@@ -315,7 +315,7 @@
       },
       {
         "clash_mode": "Direct",
-        "outbound": "🎯 direct"
+        "outbound": "🎯 Direct"
       },
       {
         "protocol": "dns",
@@ -392,7 +392,7 @@
           "geoip-private",
           "geoip-cn"
         ],
-        "outbound": "🎯 direct"
+        "outbound": "🎯 Direct"
       }
     ],
     "final": "✈️ Proxy",
