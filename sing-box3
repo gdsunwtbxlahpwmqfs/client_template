@@ -396,7 +396,7 @@
       }
     ],
     "final": "✈️ Proxy",
-    "default_doamin_resolver": "dns_resolver",
+    "default_domain_resolver": "dns_resolver",
     "auto_detect_interface": true
   },
   "experimental": {
