@@ -20,7 +20,7 @@
         "server": "dns.alidns.com",
         "path": "/dns-query",
         "domain_resolver": "dns_resolver",
-        "detour": "DIRECT"
+        "detour": "direct-out"
       },
       {
         "type": "fakeip",
@@ -33,7 +33,7 @@
         "tag": "dns_resolver",
         "server": "223.5.5.5",
         "server_port": 53,
-        "detour": "DIRECT"
+        "detour": "direct-out"
       }
     ],
     "rules": [
@@ -66,7 +66,7 @@
     "server": "time.apple.com",
     "server_port": 123,
     "interval": "30m",
-    "detour": "DIRECT"
+    "detour": "direct-out"
   },
   "inbounds": [
     {
@@ -76,28 +76,20 @@
       "listen_port": 2080,
       "sniff": true,
       "set_system_proxy": true
-    },
-    {
-      "type": "tun",
-      "tag": "tun-in",
-      "address": [
-        "172.18.0.1/30",
-        "fdfe:dcba:9876::1/126"
-      ],
-      "auto_route": true,
-      "strict_route": true,
-      "stack": "gvisor",
-      "sniff": true
     }
   ],
   "outbounds": [
     {
       "type": "direct",
-      "tag": "DIRECT"
+      "tag": "direct-out"
     },
     {
       "type": "block",
-      "tag": "REJECT"
+      "tag": "reject-out"
+    },
+    {
+        "type": "dns",
+        "tag": "dns-out"
     },
     "<INBOUND_REPLACE>",
     {
@@ -105,7 +97,7 @@
       "tag": "🚀 节点选择",
       "outbounds": [
         "♻️ 自动选择",
-        "DIRECT",
+        "direct-out",
         "<NODE_REPLACE>"
       ]
     },
@@ -113,7 +105,7 @@
       "type": "urltest",
       "tag": "♻️ 自动选择",
       "outbounds": [
-        "DIRECT",
+        "direct-out",
         "<NODE_REPLACE>"
       ],
       "url": "http://www.gstatic.com/generate_204",
@@ -171,7 +163,7 @@
       "type": "selector",
       "tag": "🎯 全球直连",
       "outbounds": [
-        "DIRECT",
+        "direct-out",
         "🚀 节点选择",
         "♻️ 自动选择"
       ]
@@ -180,16 +172,16 @@
       "type": "selector",
       "tag": "🛑 全球拦截",
       "outbounds": [
-        "REJECT",
-        "DIRECT"
+        "reject-out",
+        "direct-out"
       ]
     },
     {
       "type": "selector",
       "tag": "🍃 应用净化",
       "outbounds": [
-        "REJECT",
-        "DIRECT"
+        "reject-out",
+        "direct-out"
       ]
     },
     {
@@ -204,9 +196,9 @@
     },
     {
       "type": "selector",
-      "tag": "GLOBAL",
+      "tag": "global-out",
       "outbounds": [
-        "DIRECT",
+        "direct-out",
         "<NODE_REPLACE>"
       ]
     }
@@ -245,15 +237,15 @@
     "rules": [
       {
         "clash_mode": "Global",
-        "outbound": "GLOBAL"
+        "outbound": "global-out"
       },
       {
         "clash_mode": "Direct",
-        "outbound": "DIRECT"
+        "outbound": "direct-out"
       },
       {
         "protocol": "dns",
-        "action": "hijack-dns"
+        "outbound": "dns-out"
       },
       {
         "domain_suffix": [
