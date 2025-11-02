@@ -319,7 +319,7 @@
       },
       {
         "protocol": "dns",
-        "outbound": "dns"
+        "action": "hijack-dns"
       },
       {
         "type": "logical",
