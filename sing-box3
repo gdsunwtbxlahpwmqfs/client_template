@@ -29,10 +29,7 @@
         "inet6_range": "fc00::/18"
       },
       {
-        "type": "udp",
-        "tag": "dns_resolver",
-        "server": "223.5.5.5",
-        "server_port": 53,
+        "address": "223.5.5.5",
         "detour": "direct-out"
       }
     ],
@@ -88,8 +85,8 @@
       "tag": "reject-out"
     },
     {
-        "type": "dns",
-        "tag": "dns-out"
+      "type": "dns",
+      "tag": "dns-out"
     },
     "<INBOUND_REPLACE>",
     {
