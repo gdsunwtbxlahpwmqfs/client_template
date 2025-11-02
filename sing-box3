@@ -52,7 +52,7 @@
     ],
     "rules": [
       {
-        "rule_set": "geosite-ads",
+        "rule_set": "geosite-category-ads-all",
         "action": "predefined",
         "rcode": "NOERROR"
       },
