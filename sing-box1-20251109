@@ -194,7 +194,7 @@
         "tag": "geosite-category-ads-all",
         "type": "remote",
         "format": "binary",
-        "url": "https://hub.glowp.xyz/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-ads-all.srs",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-ads-all.srs",
         "download_detour": "✈️ Proxy",
         "update_interval": "1d"
       },
@@ -202,7 +202,7 @@
         "tag": "geosite-telegram",
         "type": "remote",
         "format": "binary",
-        "url": "https://hub.glowp.xyz/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-telegram.srs",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-telegram.srs",
         "download_detour": "✈️ Proxy",
         "update_interval": "1d"
       },
@@ -210,7 +210,7 @@
         "tag": "geoip-telegram",
         "type": "remote",
         "format": "binary",
-        "url": "https://hub.glowp.xyz/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/telegram.srs",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/telegram.srs",
         "download_detour": "✈️ Proxy",
         "update_interval": "1d"
       },
@@ -218,7 +218,7 @@
         "tag": "geosite-youtube",
         "type": "remote",
         "format": "binary",
-        "url": "https://hub.glowp.xyz/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-youtube.srs",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-youtube.srs",
         "download_detour": "✈️ Proxy",
         "update_interval": "1d"
       },
@@ -226,7 +226,7 @@
         "tag": "geosite-netflix",
         "type": "remote",
         "format": "binary",
-        "url": "https://hub.glowp.xyz/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-netflix.srs",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-netflix.srs",
         "download_detour": "✈️ Proxy",
         "update_interval": "1d"
       },
@@ -234,7 +234,7 @@
         "tag": "geoip-netflix",
         "type": "remote",
         "format": "binary",
-        "url": "https://hub.glowp.xyz/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/netflix.srs",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/netflix.srs",
         "download_detour": "✈️ Proxy",
         "update_interval": "1d"
       },
@@ -242,7 +242,7 @@
         "tag": "geosite-openai@ads",
         "type": "remote",
         "format": "binary",
-        "url": "https://hub.glowp.xyz/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-openai@ads.srs",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-openai@ads.srs",
         "download_detour": "✈️ Proxy",
         "update_interval": "1d"
       },
@@ -250,7 +250,7 @@
         "tag": "geosite-openai",
         "type": "remote",
         "format": "binary",
-        "url": "https://hub.glowp.xyz/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-openai.srs",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-openai.srs",
         "download_detour": "✈️ Proxy",
         "update_interval": "1d"
       },
@@ -258,7 +258,7 @@
         "tag": "geosite-apple",
         "type": "remote",
         "format": "binary",
-        "url": "https://hub.glowp.xyz/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-apple.srs",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-apple.srs",
         "download_detour": "✈️ Proxy",
         "update_interval": "1d"
       },
@@ -266,7 +266,7 @@
         "tag": "geosite-google",
         "type": "remote",
         "format": "binary",
-        "url": "https://hub.glowp.xyz/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-google.srs",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-google.srs",
         "download_detour": "✈️ Proxy",
         "update_interval": "1d"
       },
@@ -274,7 +274,7 @@
         "tag": "geoip-google",
         "type": "remote",
         "format": "binary",
-        "url": "https://hub.glowp.xyz/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/google.srs",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/google.srs",
         "download_detour": "✈️ Proxy",
         "update_interval": "1d"
       },
@@ -282,7 +282,7 @@
         "tag": "geosite-microsoft",
         "type": "remote",
         "format": "binary",
-        "url": "https://hub.glowp.xyz/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-microsoft.srs",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-microsoft.srs",
         "download_detour": "✈️ Proxy",
         "update_interval": "1d"
       },
@@ -290,7 +290,7 @@
         "tag": "geosite-geolocation-!cn",
         "type": "remote",
         "format": "binary",
-        "url": "https://hub.glowp.xyz/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-geolocation-!cn.srs",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-geolocation-!cn.srs",
         "download_detour": "✈️ Proxy",
         "update_interval": "1d"
       },
@@ -298,7 +298,7 @@
         "tag": "geosite-private",
         "type": "remote",
         "format": "binary",
-        "url": "https://hub.glowp.xyz/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-private.srs",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-private.srs",
         "download_detour": "✈️ Proxy",
         "update_interval": "1d"
       },
@@ -306,7 +306,7 @@
         "tag": "geosite-cn",
         "type": "remote",
         "format": "binary",
-        "url": "https://hub.glowp.xyz/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-cn.srs",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-cn.srs",
         "download_detour": "✈️ Proxy",
         "update_interval": "1d"
       },
@@ -314,7 +314,7 @@
         "tag": "geoip-private",
         "type": "remote",
         "format": "binary",
-        "url": "https://hub.glowp.xyz/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/private.srs",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/private.srs",
         "download_detour": "✈️ Proxy",
         "update_interval": "1d"
       },
@@ -322,7 +322,7 @@
         "tag": "geoip-cn",
         "type": "remote",
         "format": "binary",
-        "url": "https://hub.glowp.xyz/https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-cn.srs",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-cn.srs",
         "download_detour": "✈️ Proxy",
         "update_interval": "1d"
       }
@@ -415,7 +415,7 @@
       }
     ],
     "final": "🎯 direct",
-    "default_domain_resolver": "dns_resolver",
+    "default_domain_resolver": "dns_proxy",
     "auto_detect_interface": true
   }
 }
