@@ -22,20 +22,6 @@
       "listen_port": 5678,
       "sniff": true,
       "set_system_proxy": true
-    },
-    {
-      "type": "tun",
-      "tag": "tun-in",
-      "address": [
-        "172.18.0.1/30",
-        "fdfe:dcba:9876::1/126"
-      ],
-      "mtu": 1400,
-      "auto_route": true,
-      "strict_route": true,
-      "stack": "gvisor",
-      "sniff": true,
-      "sniff_override_destination": false
     }
   ],
   "dns": {
@@ -186,10 +172,6 @@
     {
       "tag": "block",
       "type": "block"
-    },
-    {
-      "tag": "dns",
-      "type": "dns"
     }
   ],
   "route": {
@@ -333,16 +315,23 @@
     ],
     "rules": [
       {
+        "action": "sniff"
+      },
+      {
+        "protocol": "dns",
+        "action": "hijack-dns"
+      },
+      {
+        "ip_is_private": true,
+        "outbound": "direct"
+      },
+      {
         "clash_mode": "Global",
         "outbound": "✈️ Proxy"
       },
       {
         "clash_mode": "Direct",
         "outbound": "🎯 direct"
-      },
-      {
-        "protocol": "dns",
-        "outbound": "dns"
       },
       {
         "type": "logical",
