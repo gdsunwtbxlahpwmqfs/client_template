@@ -329,10 +329,6 @@
         "action": "sniff"
       },
       {
-        "ip_is_private": true,
-        "outbound": "direct"
-      },
-      {
         "type": "logical",
         "mode": "or",
         "rules": [
@@ -441,8 +437,8 @@
         "outbound": "🎯 direct"
       }
     ],
-    "final": "🎯 direct",
-    "default_domain_resolver": "dns_resolver",
+    "final": "✈️ Proxy",
+    "default_domain_resolver": "dns_proxy",
     "auto_detect_interface": true
   }
 }
