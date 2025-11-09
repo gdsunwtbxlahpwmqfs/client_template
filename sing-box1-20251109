@@ -45,9 +45,8 @@
           "tag": "dns_proxy",
           "server": "8.8.4.4",
           "server_port": 853,
-          "server_name": "dns.google"
           "tls": {
-              "server_name": "cloudflare-dns.com"
+              "server_name": "dns.google"
           }
         },
         {
