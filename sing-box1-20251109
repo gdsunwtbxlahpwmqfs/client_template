@@ -71,6 +71,15 @@
           "tag": "dns_resolver",
           "server": "223.5.5.5",
           "server_port": 53
+        },
+        {
+          "type": "hosts",
+          "path": [],
+          "predefined": {},
+          "tag": "block"
+        },
+        {
+          "type": "local"
         }
     ],
     "rules": [
@@ -329,7 +338,7 @@
       },
       {
         "protocol": "dns",
-        "outbound": "direct"
+        "action": "hijack-dns"
       },
       {
         "type": "logical",
