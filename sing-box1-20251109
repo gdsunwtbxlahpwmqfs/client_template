@@ -168,7 +168,6 @@
       "tag": "🎯 direct",
       "outbounds": [
         "direct",
-        "block",
         "✈️ Proxy"
       ],
       "default": "direct"
@@ -177,9 +176,7 @@
       "type": "selector",
       "tag": "🛑 block",
       "outbounds": [
-        "block",
-        "direct",
-        "✈️ Proxy"
+        "block"
       ],
       "default": "block"
     },
