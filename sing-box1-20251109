@@ -186,6 +186,10 @@
     {
       "tag": "block",
       "type": "block"
+    },
+    {
+      "tag": "dns",
+      "type": "dns"
     }
   ],
   "route": {
@@ -338,7 +342,7 @@
       },
       {
         "protocol": "dns",
-        "action": "hijack-dns"
+        "outbound": "dns"
       },
       {
         "type": "logical",
