@@ -26,8 +26,10 @@
     {
       "type": "tun",
       "tag": "tun-in",
-      "inet4_address": "172.16.0.1/30",
-      "inet6_address": "fd00::1/126",
+      "address": [
+        "172.18.0.1/30",
+        "fdfe:dcba:9876::1/126"
+      ],
       "mtu": 1400,
       "auto_route": true,
       "strict_route": true,
@@ -48,8 +50,10 @@
         "detour": "direct"
       },
       {
-        "tag": "dns-fakeip",
-        "address": "fakeip"
+        "type": "fakeip",
+        "tag": "dns_fakeip",
+        "inet4_range": "198.18.0.0/15",
+        "inet6_range": "fc00::/18"
       },
       {
         "tag": "dns-block",
@@ -89,12 +93,7 @@
         "server": "dns-fakeip"
       }
     ],
-    "independent_cache": true,
-    "fakeip": {
-      "enabled": true,
-      "inet4_range": "198.18.0.0/15",
-      "inet6_range": "fc00::/18"
-    }
+    "independent_cache": true
   },
   "outbounds": [
     "<INBOUND_REPLACE>",
@@ -171,10 +170,6 @@
     {
       "tag": "block",
       "type": "block"
-    },
-    {
-      "tag": "dns",
-      "type": "dns"
     }
   ],
   "route": {
@@ -404,6 +399,7 @@
       }
     ],
     "final": "✈️ Proxy",
+    "default_domain_resolver": "local",
     "auto_detect_interface": true
   }
 }
