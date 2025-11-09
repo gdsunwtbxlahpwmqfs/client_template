@@ -351,7 +351,7 @@
       },
       {
         "rule_set": "geosite-category-ads-all",
-        "outbound": "✈️ Proxy"
+        "outbound": "block-out"
       },
       {
         "rule_set": [
