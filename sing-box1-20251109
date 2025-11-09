@@ -102,8 +102,7 @@
     "independent_cache": true,
     "cache_capacity": 4096,
     "reverse_mapping": true,
-    "strategy": "prefer_ipv4",
-    "timeout": 10
+    "strategy": "prefer_ipv4"
   },
   "outbounds": [
     "<INBOUND_REPLACE>",
