@@ -102,7 +102,7 @@
     "independent_cache": true,
     "cache_capacity": 4096,
     "reverse_mapping": true,
-    "strategy": "prefer_ipv4"
+    "strategy": "ipv4_only"
   },
   "outbounds": [
     "<INBOUND_REPLACE>",
@@ -350,7 +350,7 @@
             "invert": true
           }
         ],
-        "outbound": "🎯 Direct"
+        "outbound": "🎯 direct"
       },
       {
         "clash_mode": "Global",
