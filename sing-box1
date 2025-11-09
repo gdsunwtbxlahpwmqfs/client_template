@@ -171,10 +171,6 @@
     {
       "tag": "block",
       "type": "block"
-    },
-    {
-      "tag": "dns",
-      "type": "dns"
     }
   ],
   "route": {
@@ -326,8 +322,11 @@
         "outbound": "🎯 direct"
       },
       {
+        "action": "sniff"
+      },
+      {
         "protocol": "dns",
-        "outbound": "dns"
+        "action": "hijack-dns"
       },
       {
         "type": "logical",
