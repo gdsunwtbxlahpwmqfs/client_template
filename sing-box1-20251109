@@ -57,7 +57,8 @@
           "path": "/dns-query",
           "headers": {
             "accept": "application/dns-message"
-          }
+          },
+          "domain_resolver": "dns_resolver"
         },
         {
           "type": "fakeip",
