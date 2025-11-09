@@ -44,7 +44,7 @@
               "insecure": false,
               "server_name": "cloudflare-dns.com"
             },
-            "bootstrap": ["1.1.1.1"]
+            "detour": "✈️ Proxy"
         },
         {
           "type": "h3",
