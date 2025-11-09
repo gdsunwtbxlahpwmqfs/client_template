@@ -313,12 +313,35 @@
         "action": "sniff"
       },
       {
-        "protocol": "dns",
+        "ip_is_private": true,
+        "outbound": "direct"
+      },
+      {
+        "type": "logical",
+        "mode": "or",
+        "rules": [
+          {
+            "protocol": "dns"
+          },
+          {
+            "port": 53
+          }
+        ],
         "action": "hijack-dns"
       },
       {
-        "ip_is_private": true,
-        "outbound": "direct"
+        "type": "logical",
+        "mode": "and",
+        "rules": [
+          {
+            "rule_set": "geoip-cn"
+          },
+          {
+            "rule_set": "geosite-geolocation-!cn",
+            "invert": true
+          }
+        ],
+        "outbound": "🎯 Direct"
       },
       {
         "clash_mode": "Global",
