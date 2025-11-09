@@ -85,14 +85,6 @@
       },
       {
         "rule_set": "geosite-geolocation-!cn",
-        "query_type": [
-          "A",
-          "AAAA"
-        ],
-        "server": "dns-fakeip"
-      },
-      {
-        "rule_set": "geosite-geolocation-!cn",
         "server": "dns_proxy"
       }
     ],
