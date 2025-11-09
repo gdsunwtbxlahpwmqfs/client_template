@@ -31,13 +31,20 @@
   "dns": {
     "servers": [
         {
-          "type": "tls",
-          "tag": "dns_proxy",
-          "server": "1.1.1.1",
-          "server_port": 853,
-          "tls": {
-            "server_name": "cloudflare-dns.com"
-          }
+            "type": "https",
+            "tag": "dns_proxy",
+            "server": "1.1.1.1",
+            "server_port": 443,
+            "path": "/dns-query",
+            "headers": {
+              "Host": "cloudflare-dns.com"
+            },
+            "tls": {
+              "enabled": true,
+              "insecure": false,
+              "server_name": "cloudflare-dns.com"
+            },
+            "bootstrap": ["1.1.1.1"]
         },
         {
           "type": "h3",
