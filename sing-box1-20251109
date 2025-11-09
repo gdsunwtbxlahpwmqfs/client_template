@@ -105,7 +105,7 @@
         "server": "dns_proxy"
       }
     ],
-    "final": "dns_proxy",
+    "final": "dns_resolver",
     "independent_cache": true,
     "cache_capacity": 4096,
     "reverse_mapping": true,
