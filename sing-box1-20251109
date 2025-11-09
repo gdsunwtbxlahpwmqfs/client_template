@@ -60,10 +60,6 @@
         "tag": "dns-fakeip",
         "inet4_range": "198.18.0.0/15",
         "inet6_range": "fc00::/18"
-      },
-      {
-        "tag": "dns-block",
-        "address": "rcode://success"
       }
     ],
     "rules": [
@@ -84,14 +80,15 @@
             ]
           }
         ],
-        "disable_cache": true,
-        "server": "dns-block"
+        "action": "predefined",
+        "rcode": "NOERROR"
       },
       {
         "outbound": "any",
         "server": "local"
       },
       {
+        "rule_set": "geosite-geolocation-!cn",
         "query_type": [
           "A",
           "AAAA"
