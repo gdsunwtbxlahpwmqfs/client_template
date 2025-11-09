@@ -41,13 +41,19 @@
   "dns": {
     "servers": [
       {
-        "tag": "google",
-        "address": "tls://8.8.4.4"
+        "type": "tls",
+        "tag": "dns_proxy",
+        "server": "1.1.1.1",
+        "server_port": 853,
+        "tls": {
+          "server_name": "cloudflare-dns.com"
+        }
       },
       {
+        "type": "udp",
         "tag": "local",
-        "address": "223.5.5.5",
-        "detour": "direct"
+        "server": "223.5.5.5",
+        "server_port": 53
       },
       {
         "type": "fakeip",
@@ -322,7 +328,7 @@
       },
       {
         "protocol": "dns",
-        "outbound": "dns"
+        "action": "hijack-dns"
       },
       {
         "type": "logical",
