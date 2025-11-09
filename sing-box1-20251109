@@ -67,10 +67,9 @@
           "inet6_range": "fc00::/18"
         },
         {
-          "type": "udp",
+          "type": "https",
           "tag": "dns_resolver",
-          "server": "223.5.5.5",
-          "server_port": 53
+          "server": "223.5.5.5"
         }
     ],
     "rules": [
@@ -99,7 +98,7 @@
         "server": "dns_proxy"
       }
     ],
-    "final": "dns_resolver",
+    "final": "dns_direct",
     "independent_cache": true,
     "cache_capacity": 4096,
     "reverse_mapping": true,
