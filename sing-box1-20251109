@@ -84,10 +84,6 @@
         "rcode": "NOERROR"
       },
       {
-        "outbound": "any",
-        "server": "local"
-      },
-      {
         "rule_set": "geosite-geolocation-!cn",
         "query_type": [
           "A",
