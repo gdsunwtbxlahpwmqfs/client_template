@@ -64,10 +64,11 @@
           "inet6_range": "fc00::/18"
         },
         {
-          "type": "udp",
+          "type": "https",
           "tag": "dns_resolver",
           "server": "223.5.5.5",
-          "server_port": 53
+          "server_port": 443,
+          "path": "/dns-query"
         },
         {
           "type": "hosts",
