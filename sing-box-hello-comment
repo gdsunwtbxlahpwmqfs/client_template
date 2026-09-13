@@ -1,0 +1,421 @@
+{
+  // ================================================================
+  // sing-box 客户端配置（注释版）
+  // 参考文档: https://sing-box.sagernet.org/configuration/
+  // 说明:
+  //   - sing-box 原生支持 JSONC（// 注释），可直接 sing-box run -c 本文件
+  //   - <INBOUND_REPLACE> / <NODE_REPLACE> 是模板占位符，由接入脚本替换
+  //   - 本文件面向 sing-box >= 1.14（使用了 http_clients / store_dns）
+  // ================================================================
+
+  // 编辑器 Schema 提示（不影响运行）: https://sing-box.sagernet.org/configuration/schema/
+  "$schema": "https://sing-box.sagernet.org/schema.json",
+
+  // ---------- 日志 (https://sing-box.sagernet.org/configuration/log/) ----------
+  "log": {
+    "disabled": false,       // 是否完全禁用日志输出
+    "level": "info",         // 日志级别: trace|debug|info|warn|error|fatal|panic
+    "timestamp": true,       // 每行日志附加时间戳
+    "output": "singbox.log"  // 输出到文件（启用后不再输出到控制台）
+  },
+
+  // ---------- HTTP 客户端 (https://sing-box.sagernet.org/configuration/shared/http-client/) ----------
+  // 1.14 起远程规则集的下载走「HTTP 客户端」；
+  // 这里定义 1 个走 ✈️ Proxy 的客户端，替代已废弃的 rule-set download_detour
+  "http_clients": [
+    {
+      "tag": "http-client-proxy", // 名称，由 route.default_http_client 引用
+      "detour": "✈️ Proxy"        // Dial Fields: 通过 ✈️ Proxy 出站下载规则集
+    }
+  ],
+
+  // ---------- DNS (https://sing-box.sagernet.org/configuration/dns/) ----------
+  "dns": {
+    // DNS 服务器列表 (https://sing-box.sagernet.org/configuration/dns/server/)
+    "servers": [
+      { // DoT（TLS 加密）DNS —— 走代理，用于解析「国外」域名，规避污染
+        "type": "tls",               // 服务器类型: TLS
+        "tag": "dns_proxy",          // 服务器 tag，供 DNS rules 引用
+        "server": "1.1.1.1",         // Cloudflare 主 DNS
+        "server_port": 853,          // DoT 默认端口 853
+        "tls": {
+          "server_name": "cloudflare-dns.com" // TLS SNI，校验证书用
+        }
+      },
+      { // DoH3（HTTP/3）DNS —— 阿里公共 DNS，直连解析「国内」域名（快且不必走代理）
+        "type": "h3",                // 类型: HTTP3
+        "tag": "dns_direct",         // tag 供引用
+        "server": "dns.alidns.com",  // 阿里 DoH 域名
+        "server_port": 443,
+        "path": "/dns-query",        // DoH 请求路径
+        "headers": {                 // 自定义 HTTP 头
+          "accept": "application/dns-message"
+        },
+        "domain_resolver": "dns_resolver" // server 是域名，需用 dns_resolver 先解析它
+      },
+      { // FakeIP —— 为「国外」域名分配虚拟 IP，配合 TUN sniff 反查域名实现分流
+        "type": "fakeip",
+        "tag": "dns_fakeip",
+        "inet4_range": "198.18.0.0/15", // IPv4 fakeip 池
+        "inet6_range": "fc00::/18"      // IPv6 fakeip 池
+      },
+      { // 落地解析器 —— 纯 UDP 直连，仅用于引导 DNS-over-HTTPS 服务器域名
+        "type": "udp",
+        "tag": "dns_resolver",      // 被 dns_direct 的 domain_resolver 引用
+        "server": "223.5.5.5",      // 阿里
+        "server_port": 53
+      },
+      { // hosts 服务器 —— 广告域名在此被固定解析策略拦截
+        "type": "hosts",
+        "path": [],                // 本地 hosts 文件路径列表（空 = 不用文件）
+        "predefined": {},          // 内置 hosts 表（空对象，实际拦截靠 DNS rule）
+        "tag": "block"
+      },
+      { // local —— 系统本地解析器，最终兜底
+        "type": "local",
+        "tag": "system_resolver"
+      }
+    ],
+    // DNS 规则 (https://sing-box.sagernet.org/configuration/dns/rule/)，自上而下第一条匹配生效
+    "rules": [
+      { // 广告域名 → 返回空 NOERROR 应答（等效吞掉解析结果，达到屏蔽目的）
+        "rule_set": "geosite-category-ads-all",
+        "action": "predefined",    // 使用 hosts 服务器返回预设应答
+        "rcode": "NOERROR"
+      },
+      { // 国外域名 + 查询 A/AAAA → 返回 fakeip 虚拟 IP
+        "rule_set": "geosite-geolocation-!cn",
+        "query_type": ["A", "AAAA"],
+        "server": "dns_fakeip"
+      },
+      { // 国外域名（其他记录类型，如 MX/CNAME 反查）→ 走代理 DNS
+        "rule_set": "geosite-geolocation-!cn",
+        "server": "dns_proxy"
+      }
+    ],
+    "final": "system_resolver",    // 未匹配的默认 DNS 服务器（国内域名最终走系统/直连）
+    "cache_capacity": 4096,        // 缓存容量（LRU，>=1024 才生效）(1.11+)
+    "reverse_mapping": true,       // 记录 IP→域名反查，供 route 用域名规则匹配已解析连接
+                                   // 注意: macOS 系统会代理/缓存 DNS，此项效果有限
+    "strategy": "prefer_ipv4"      // 默认策略：优先 IPv4
+  },
+
+  // ---------- NTP (https://sing-box.sagernet.org/configuration/ntp/) ----------
+  "ntp": {
+    "enabled": true,               // 内置 NTP 客户端，为 TLS/VMess 等提供可靠时间
+    "server": "time.apple.com",    // NTP 服务器
+    "server_port": 123,
+    "interval": "30m",             // 对时间隔（默认 30m）
+    "detour": "direct-out"         // Dial Fields：直连出站对时，不走代理
+  },
+
+  // ---------- 入站 (https://sing-box.sagernet.org/configuration/inbound/) ----------
+  "inbounds": [
+    { // TUN 虚拟网卡 —— 系统级透明代理（来自 sing-box 模板的优势项）
+      "type": "tun",
+      "tag": "tun-in",
+      "address": "172.19.0.1/30",   // TUN 接口地址 (1.10 起 inet4/6_address 合并为 address)
+      "auto_route": true,           // 自动把默认路由指向 TUN
+      "strict_route": true,         // 严格路由：屏蔽直连网卡以外的 DNS (Windows) / 让不支持的网络不可达
+      "stack": "system",            // 协议栈: system|gvisor|mixed（system 性能好）
+      "platform": {
+        "http_proxy": {             // 平台层系统 HTTP 代理注入（macOS/Windows/Android）
+          "enabled": true,
+          "server": "127.0.0.1",
+          "server_port": 2080       // 指向下方 mixed-in 端口
+        }
+      }
+    },
+    { // Mixed 入站 —— SOCKS4/4a/5 + HTTP 单端口聚合
+      "type": "mixed",
+      "tag": "mixed-in",
+      "listen": "127.0.0.1",        // 仅监听本机
+      "listen_port": 2080,
+      // "sniff" 已在 inbound 上废弃(1.11)，下层 route 已有 action:sniff 规则，故不在此重复
+      "set_system_proxy": true      // 启动/停止时自动设置系统代理（与本文件 tun http_proxy 一致，可二选一）
+    }
+  ],
+
+  // ---------- 出站 (https://sing-box.sagernet.org/configuration/outbound/) ----------
+  "outbounds": [
+    "<INBOUND_REPLACE>",            // 模板占位符：接入脚本替换为落地节点
+    { // 主代理组 —— Clash 面板可手动选择
+      "type": "selector",           // 选择器: 只能通过 Clash API 切换
+      "tag": "✈️ Proxy",
+      "outbounds": [                // 可选项
+        "♻️ 自动选择",
+        "direct-out",
+        "<NODE_REPLACE>"
+      ]
+    },
+    { // 自动选择组 —— 对节点自动测速选优
+      "type": "urltest",            // https://sing-box.sagernet.org/configuration/outbound/urltest/
+      "tag": "♻️ 自动选择",
+      "outbounds": ["<NODE_REPLACE>"],
+      "url": "http://www.gstatic.com/generate_204", // 测速 URL（默认即此）
+      "interval": "5m",             // 测速间隔（默认 3m）
+      "tolerance": 50               // 延迟容忍度 ms：新节点须快这么多才切换
+    },
+    { // Telegram 策略组
+      "type": "selector",
+      "tag": "📱 Telegram",
+      "outbounds": ["♻️ 自动选择", "🎯 Direct", "<NODE_REPLACE>"]
+    },
+    { // YouTube/流媒体 策略组
+      "type": "selector",
+      "tag": "▶️ YouTube",
+      "outbounds": ["♻️ 自动选择", "🎯 Direct", "<NODE_REPLACE>"]
+    },
+    { // AI 策略组（OpenAI/Anthropic/Gemini 等）
+      "type": "selector",
+      "tag": "🤖 OpenAI",
+      "outbounds": ["♻️ 自动选择", "🎯 Direct", "<NODE_REPLACE>"]
+    },
+    { // 直连策略组 —— 默认直连，可手动切到走代理/阻断
+      "type": "selector",
+      "tag": "🎯 Direct",
+      "outbounds": ["direct-out", "block-out", "✈️ Proxy"],
+      "default": "direct-out"       // 默认选中项（1.14 起也支持按 tag 记忆）
+    },
+    { // 阻断策略组 —— 默认阻断，用于手动屏蔽
+      "type": "selector",
+      "tag": "🛑 Block",
+      "outbounds": ["block-out", "direct-out", "✈️ Proxy"],
+      "default": "block-out"
+    },
+    { // 真正直连的出站
+      "tag": "direct-out",
+      "type": "direct"
+    },
+    { // 阻断出站（丢弃流量）
+      "tag": "block-out",
+      "type": "block"
+    }
+  ],
+
+  // ---------- 路由 (https://sing-box.sagernet.org/configuration/route/) ----------
+  "route": {
+    // 规则集 (https://sing-box.sagernet.org/configuration/rule-set/)
+    // 统一走 http-client-proxy（✈️ Proxy）下载，替代已废弃的 download_detour(1.14废弃/1.16移除)
+    "rule_set": [
+      { // 广告域名
+        "tag": "geosite-category-ads-all",
+        "type": "remote",             // remote = 在线拉取
+        "format": "binary",           // 二进制 .srs（比 source 文本快）
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-ads-all.srs",
+        "update_interval": "1d"       // 每 24h 更新一次
+      },
+      {
+        "tag": "geosite-telegram",
+        "type": "remote", "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-telegram.srs",
+        "update_interval": "1d"
+      },
+      { // Telegram 服务器 IP 段（WARP/泛 IP 场景补漏）
+        "tag": "geoip-telegram",
+        "type": "remote", "format": "binary",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/telegram.srs",
+        "update_interval": "1d"
+      },
+      {
+        "tag": "geosite-youtube",
+        "type": "remote", "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-youtube.srs",
+        "update_interval": "1d"
+      },
+      {
+        "tag": "geosite-netflix",
+        "type": "remote", "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-netflix.srs",
+        "update_interval": "1d"
+      },
+      {
+        "tag": "geoip-netflix",
+        "type": "remote", "format": "binary",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/netflix.srs",
+        "update_interval": "1d"
+      },
+      { // OpenAI 自身的广告/统计子域（单独拦）
+        "tag": "geosite-openai@ads",
+        "type": "remote", "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-openai@ads.srs",
+        "update_interval": "1d"
+      },
+      {
+        "tag": "geosite-openai",
+        "type": "remote", "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-openai.srs",
+        "update_interval": "1d"
+      },
+      { // Anthropic（claude.ai 等）
+        "tag": "geosite-anthropic",
+        "type": "remote", "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-anthropic.srs",
+        "update_interval": "1d"
+      },
+      { // Google Gemini
+        "tag": "geosite-google-gemini",
+        "type": "remote", "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-google-gemini.srs",
+        "update_interval": "1d"
+      },
+      {
+        "tag": "geosite-apple",
+        "type": "remote", "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-apple.srs",
+        "update_interval": "1d"
+      },
+      {
+        "tag": "geosite-google",
+        "type": "remote", "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-google.srs",
+        "update_interval": "1d"
+      },
+      {
+        "tag": "geoip-google",
+        "type": "remote", "format": "binary",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/google.srs",
+        "update_interval": "1d"
+      },
+      {
+        "tag": "geosite-microsoft",
+        "type": "remote", "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-microsoft.srs",
+        "update_interval": "1d"
+      },
+      {
+        "tag": "geosite-geolocation-!cn",   // 全部国外热门站点
+        "type": "remote", "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-geolocation-!cn.srs",
+        "update_interval": "1d"
+      },
+      {
+        "tag": "geosite-private",          // 私有域名（内网判断）
+        "type": "remote", "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-private.srs",
+        "update_interval": "1d"
+      },
+      {
+        "tag": "geosite-cn",
+        "type": "remote", "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-cn.srs",
+        "update_interval": "1d"
+      },
+      {
+        "tag": "geoip-private",
+        "type": "remote", "format": "binary",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/private.srs",
+        "update_interval": "1d"
+      },
+      {
+        "tag": "geoip-cn",
+        "type": "remote", "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-cn.srs",
+        "update_interval": "1d"
+      }
+    ],
+    // 路由规则 (https://sing-box.sagernet.org/configuration/route/rule/)，自上而下第一条匹配生效
+    "rules": [
+      { "action": "sniff" },               // 对所有连接做协议嗅探，识别真实域名/协议
+      { // 内网/私网 IP 直连（避免走了代理）
+        "ip_is_private": true,
+        "outbound": "🎯 Direct"            // 原模板误写 "direct"（该 tag 不存在），已修正
+      },
+      { // DNS 流量（协议或 53 端口）→ 劫持进 sing-box DNS 模块
+        "type": "logical", "mode": "or",
+        "rules": [
+          { "protocol": "dns" },
+          { "port": 53 }
+        ],
+        "action": "hijack-dns"
+      },
+      { // 国内 IP 且不属于「国外 geosite」→ 直连（海外 IP 的国内域名判定）
+        "type": "logical", "mode": "and",
+        "rules": [
+          { "rule_set": "geoip-cn" },
+          { "rule_set": "geosite-geolocation-!cn", "invert": true }
+        ],
+        "outbound": "🎯 Direct"
+      },
+      { // Clash 全局模式 → 走主代理
+        "clash_mode": "Global",
+        "outbound": "✈️ Proxy"
+      },
+      { // Clash 直连模式 → 直连
+        "clash_mode": "Direct",
+        "outbound": "🎯 Direct"
+      },
+      { // STUN/遥测/分析域名 → 阻断（防 WebRTC 泄漏、防遥测）
+        "type": "logical", "mode": "or",
+        "rules": [
+          { "domain_regex": "^stun\\..+" },                 // stun.* 打洞域名
+          { "domain_keyword": ["stun", "httpdns"] },
+          { "domain_suffix": [
+              "appcenter.ms", "app-measurement.com",        // 微软遥测
+              "firebase.io", "crashlytics.com",             // Firebase / 崩溃统计
+              "google-analytics.com"                        // 谷歌统计
+            ]
+          },
+          { "protocol": "stun" }
+        ],
+        "outbound": "block-out"
+      },
+      { // 广告域名 → 阻断
+        "rule_set": "geosite-category-ads-all",
+        "outbound": "block-out"
+      },
+      { // Telegram（域名+IP）→ 专属策略组
+        "rule_set": ["geosite-telegram", "geoip-telegram"],
+        "outbound": "📱 Telegram"
+      },
+      { // YouTube → 专属策略组
+        "rule_set": "geosite-youtube",
+        "outbound": "▶️ YouTube"
+      },
+      { // OpenAI 广告子域单独拦
+        "rule_set": "geosite-openai@ads",
+        "outbound": "block-out"
+      },
+      { // AI 站点（OpenAI/Anthropic/Gemini 规则集 + bard/gemini regex + 常见域名）→ AI 策略组
+        "type": "logical", "mode": "or",
+        "rules": [
+          { "rule_set": ["geosite-openai", "geosite-anthropic", "geosite-google-gemini"] },
+          { "domain_regex": "^(bard|gemini)\\.google\\.com$" },
+          { "domain_suffix": [
+              "chatgpt.com", "gateway.ai.cloudflare.com", "claude.ai", "grok.com",
+              "groq.com", "meta.ai", "openart.ai", "openrouter.ai", "perplexity.ai", "x.ai"
+            ]
+          }
+        ],
+        "outbound": "🤖 OpenAI"
+      },
+      { // 其余国外热门站点 → 走主代理
+        "rule_set": "geosite-geolocation-!cn",
+        "outbound": "✈️ Proxy"
+      },
+      { // 私有/国内 域名与 IP → 直连
+        "rule_set": ["geosite-private", "geosite-cn", "geoip-private", "geoip-cn"],
+        "outbound": "🎯 Direct"
+      }
+    ],
+    "final": "✈️ Proxy",              // 兜底出站（未匹配任何规则时走主代理）
+    "default_http_client": "http-client-proxy", // 远程规则集的默认下载客户端 (1.14+)
+    "default_domain_resolver": "dns_resolver",  // 默认域名解析器：走 dns_resolver (1.12+)
+    "auto_detect_interface": true     // 自动绑定默认网卡，防止 TUN 下路由回环
+  },
+
+  // ---------- 实验性 (https://sing-box.sagernet.org/configuration/experimental/) ----------
+  "experimental": {
+    "clash_api": {                    // Clash 控制 API：面板/切换策略组
+      "external_controller": "127.0.0.1:9090", // RESTful API 监听地址
+      "external_ui": "ui",            // 内置 Web 面板（目录为空时自动下载 Yacd-meta）
+      "default_mode": "rule"          // 默认 Clash 模式，供 route 中 clash_mode 规则引用
+    },
+    "cache_file": {                   // 缓存文件（1.8+），持久化各类状态
+      "enabled": true,
+      "path": "cache.db",             // 缓存文件路径（默认 cache.db）
+      "store_fakeip": true,           // 持久化 fakeip 映射，重启后保持解析一致
+      "store_dns": true               // (1.14+) 持久化 DNS 缓存，加速冷启动（替代旧 store_rdrc）
+    }
+  }
+}
