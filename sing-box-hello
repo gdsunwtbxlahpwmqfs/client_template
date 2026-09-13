@@ -44,12 +44,6 @@
         "server_port": 53
       },
       {
-        "type": "hosts",
-        "path": [],
-        "predefined": {},
-        "tag": "block"
-      },
-      {
         "type": "local",
         "tag": "system_resolver"
       }
@@ -92,7 +86,6 @@
       "address": "172.19.0.1/30",
       "auto_route": true,
       "strict_route": true,
-      "stack": "system",
       "platform": {
         "http_proxy": {
           "enabled": true,
@@ -162,28 +155,13 @@
       "tag": "🎯 Direct",
       "outbounds": [
         "direct-out",
-        "block-out",
         "✈️ Proxy"
       ],
       "default": "direct-out"
     },
     {
-      "type": "selector",
-      "tag": "🛑 Block",
-      "outbounds": [
-        "block-out",
-        "direct-out",
-        "✈️ Proxy"
-      ],
-      "default": "block-out"
-    },
-    {
       "tag": "direct-out",
       "type": "direct"
-    },
-    {
-      "tag": "block-out",
-      "type": "block"
     }
   ],
   "route": {
@@ -324,7 +302,8 @@
     ],
     "rules": [
       {
-        "action": "sniff"
+        "action": "sniff",
+        "timeout": "150ms"
       },
       {
         "ip_is_private": true,
@@ -342,20 +321,6 @@
           }
         ],
         "action": "hijack-dns"
-      },
-      {
-        "type": "logical",
-        "mode": "and",
-        "rules": [
-          {
-            "rule_set": "geoip-cn"
-          },
-          {
-            "rule_set": "geosite-geolocation-!cn",
-            "invert": true
-          }
-        ],
-        "outbound": "🎯 Direct"
       },
       {
         "clash_mode": "Global",
@@ -391,11 +356,11 @@
             "protocol": "stun"
           }
         ],
-        "outbound": "block-out"
+        "action": "reject"
       },
       {
         "rule_set": "geosite-category-ads-all",
-        "outbound": "block-out"
+        "action": "reject"
       },
       {
         "rule_set": [
@@ -410,7 +375,7 @@
       },
       {
         "rule_set": "geosite-openai@ads",
-        "outbound": "block-out"
+        "action": "reject"
       },
       {
         "type": "logical",
@@ -446,6 +411,20 @@
       {
         "rule_set": "geosite-geolocation-!cn",
         "outbound": "✈️ Proxy"
+      },
+      {
+        "type": "logical",
+        "mode": "and",
+        "rules": [
+          {
+            "rule_set": "geoip-cn"
+          },
+          {
+            "rule_set": "geosite-geolocation-!cn",
+            "invert": true
+          }
+        ],
+        "outbound": "🎯 Direct"
       },
       {
         "rule_set": [
