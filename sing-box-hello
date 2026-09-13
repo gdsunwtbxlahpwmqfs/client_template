@@ -110,7 +110,7 @@
     }
   ],
   "outbounds": [
-    "<NODE_REPLACE>",
+    "<OUTBOUND_REPLACE>",
     {
       "type": "selector",
       "tag": "✈️ Proxy",
