@@ -79,7 +79,7 @@ rules:
   - RULE-SET,reject,🛑 全球拦截
   - RULE-SET,icloud,🚀 节点选择
   - RULE-SET,apple,🚀 节点选择
-  - RULE-SET,google,DIRECT
+  - RULE-SET,google,🚀 节点选择
   - RULE-SET,proxy,🚀 节点选择
   - RULE-SET,direct,DIRECT
   - RULE-SET,lancidr,DIRECT

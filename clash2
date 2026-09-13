@@ -33,7 +33,7 @@ proxy-groups:
       - 🚀 节点选择
       - ♻️ 自动选择
       - DIRECT
-  - name: 💬 OpenAi
+  - name: 💬 Ai
     type: select
     proxies:
       - 🚀 节点选择
@@ -136,6 +136,37 @@ proxy-groups:
       - ♻️ 自动选择
       - DIRECT
 rules:
+  - DOMAIN-SUFFIX,openai.com,💬 Ai
+  - DOMAIN-SUFFIX,chatgpt.com,💬 Ai
+  - DOMAIN-SUFFIX,oaistatic.com,💬 Ai
+  - DOMAIN-SUFFIX,oaiusercontent.com,💬 Ai
+  - DOMAIN-SUFFIX,openaiapi-site.azureedge.net,💬 Ai
+  - DOMAIN-KEYWORD,openai,💬 Ai
+  - DOMAIN-SUFFIX,arkoselabs.com,💬 Ai
+  - DOMAIN-SUFFIX,client-api.arkoselabs.com,💬 Ai
+  - DOMAIN-SUFFIX,anthropic.com,💬 Ai
+  - DOMAIN-SUFFIX,claude.ai,💬 Ai
+  - DOMAIN-KEYWORD,anthropic,💬 Ai
+  - DOMAIN-SUFFIX,gemini.google.com,💬 Ai
+  - DOMAIN-SUFFIX,bard.google.com,💬 Ai
+  - DOMAIN-SUFFIX,aistudio.google.com,💬 Ai
+  - DOMAIN-SUFFIX,generativeai.google,💬 Ai
+  - DOMAIN-SUFFIX,alkalimining-pa.googleapis.com,💬 Ai
+  - DOMAIN-SUFFIX,proactivebackend-pa.googleapis.com,💬 Ai
+  - DOMAIN-SUFFIX,copilot.microsoft.com,💬 Ai
+  - DOMAIN-SUFFIX,sydney.bing.com,💬 Ai
+  - DOMAIN-SUFFIX,bing.com,💬 Ai
+  - DOMAIN-SUFFIX,perplexity.ai,💬 Ai
+  - DOMAIN-SUFFIX,groq.com,💬 Ai
+  - DOMAIN-SUFFIX,deepseek.com,💬 Ai
+  - DOMAIN-SUFFIX,midjourney.com,💬 Ai
+  - DOMAIN-SUFFIX,discord.com,💬 Ai
+  - DOMAIN-SUFFIX,suno.com,💬 Ai
+  - DOMAIN-SUFFIX,suno.ai,💬 Ai
+  - DOMAIN-SUFFIX,luma.ai,💬 Ai
+  - DOMAIN-SUFFIX,runwayml.com,💬 Ai
+  - DOMAIN-SUFFIX,cursor.com,💬 Ai
+  - DOMAIN-SUFFIX,cursor.sh,💬 Ai
   - DOMAIN-SUFFIX,acl4.ssr,🎯 全球直连
   - DOMAIN-SUFFIX,ip6-localhost,🎯 全球直连
   - DOMAIN-SUFFIX,ip6-loopback,🎯 全球直连
@@ -2012,31 +2043,16 @@ rules:
   - IP-CIDR,205.180.175.0/24,🍎 苹果服务,no-resolve
   - DOMAIN-SUFFIX,t.me,📲 电报消息
   - DOMAIN-SUFFIX,tdesktop.com,📲 电报消息
-  - DOMAIN-SUFFIX,telegra.ph,📲 电报消息
   - DOMAIN-SUFFIX,telegram.me,📲 电报消息
   - DOMAIN-SUFFIX,telegram.org,📲 电报消息
-  - DOMAIN-SUFFIX,telesco.pe,📲 电报消息
-  - IP-CIDR,91.108.0.0/16,📲 电报消息,no-resolve
-  - IP-CIDR,109.239.140.0/24,📲 电报消息,no-resolve
+  - IP-CIDR,91.108.4.0/22,📲 电报消息,no-resolve
+  - IP-CIDR,91.108.8.0/22,📲 电报消息,no-resolve
+  - IP-CIDR,91.108.56.0/22,📲 电报消息,no-resolve
   - IP-CIDR,149.154.160.0/20,📲 电报消息,no-resolve
+  - IP-CIDR,67.198.55.0/24,📲 电报消息,no-resolve
   - IP-CIDR6,2001:67c:4e8::/48,📲 电报消息,no-resolve
   - IP-CIDR6,2001:b28:f23d::/48,📲 电报消息,no-resolve
   - IP-CIDR6,2001:b28:f23f::/48,📲 电报消息,no-resolve
-  - DOMAIN-KEYWORD,openai,💬 OpenAi
-  - DOMAIN-SUFFIX,auth0.com,💬 OpenAi
-  - DOMAIN-SUFFIX,challenges.cloudflare.com,💬 OpenAi
-  - DOMAIN-SUFFIX,client-api.arkoselabs.com,💬 OpenAi
-  - DOMAIN-SUFFIX,events.statsigapi.net,💬 OpenAi
-  - DOMAIN-SUFFIX,featuregates.org,💬 OpenAi
-  - DOMAIN-SUFFIX,identrust.com,💬 OpenAi
-  - DOMAIN-SUFFIX,intercom.io,💬 OpenAi
-  - DOMAIN-SUFFIX,intercomcdn.com,💬 OpenAi
-  - DOMAIN-SUFFIX,oaistatic.com,💬 OpenAi
-  - DOMAIN-SUFFIX,oaiusercontent.com,💬 OpenAi
-  - DOMAIN-SUFFIX,openai.com,💬 OpenAi
-  - DOMAIN-SUFFIX,openaiapi-site.azureedge.net,💬 OpenAi
-  - DOMAIN-SUFFIX,sentry.io,💬 OpenAi
-  - DOMAIN-SUFFIX,stripe.com,💬 OpenAi
   - DOMAIN-SUFFIX,163yun.com,🎶 网易音乐
   - DOMAIN-SUFFIX,api.iplay.163.com,🎶 网易音乐
   - DOMAIN-SUFFIX,hz.netease.com,🎶 网易音乐
@@ -2124,20 +2140,21 @@ rules:
   - DOMAIN-SUFFIX,nintendo.net,🎮 游戏平台
   - DOMAIN-SUFFIX,nintendo.nl,🎮 游戏平台
   - DOMAIN-SUFFIX,nintendowifi.net,🎮 游戏平台
+  - DOMAIN-SUFFIX,youtube.com,📹 油管视频
+  - DOMAIN-SUFFIX,googlevideo.com,📹 油管视频
+  - DOMAIN-SUFFIX,ytimg.com,📹 油管视频
+  - DOMAIN-SUFFIX,ggpht.com,📹 油管视频
   - DOMAIN-KEYWORD,youtube,📹 油管视频
   - DOMAIN,youtubei.googleapis.com,📹 油管视频
   - DOMAIN,yt3.ggpht.com,📹 油管视频
-  - DOMAIN-SUFFIX,googlevideo.com,📹 油管视频
   - DOMAIN-SUFFIX,gvt2.com,📹 油管视频
   - DOMAIN-SUFFIX,withyoutube.com,📹 油管视频
   - DOMAIN-SUFFIX,youtu.be,📹 油管视频
   - DOMAIN-SUFFIX,youtube-nocookie.com,📹 油管视频
-  - DOMAIN-SUFFIX,youtube.com,📹 油管视频
   - DOMAIN-SUFFIX,youtubeeducation.com,📹 油管视频
   - DOMAIN-SUFFIX,youtubegaming.com,📹 油管视频
   - DOMAIN-SUFFIX,youtubekids.com,📹 油管视频
   - DOMAIN-SUFFIX,yt.be,📹 油管视频
-  - DOMAIN-SUFFIX,ytimg.com,📹 油管视频
   - DOMAIN-KEYWORD,apiproxy-device-prod-nlb-,🎥 奈飞视频
   - DOMAIN-KEYWORD,dualstack.apiproxy-,🎥 奈飞视频
   - DOMAIN-KEYWORD,netflixdnstest,🎥 奈飞视频
@@ -9199,6 +9216,12 @@ rules:
   - DOMAIN-SUFFIX,zmzapi.net,🎯 全球直连
   - DOMAIN-SUFFIX,zmzfile.com,🎯 全球直连
   - DOMAIN-SUFFIX,teamviewer.com,🎯 全球直连
+  - IP-CIDR,1.0.1.0/24,🎯 全球直连,no-resolve
+  - IP-CIDR,1.0.2.0/23,🎯 全球直连,no-resolve
+  - IP-CIDR,1.0.8.0/21,🎯 全球直连,no-resolve
+  - IP-CIDR,1.1.8.0/24,🎯 全球直连,no-resolve
+  - IP-CIDR,106.2.32.0/19,🎯 全球直连,no-resolve
+  - IP-CIDR,106.2.64.0/18,🎯 全球直连,no-resolve
   - IP-CIDR,139.220.243.27/32,🎯 全球直连,no-resolve
   - IP-CIDR,172.16.102.56/32,🎯 全球直连,no-resolve
   - IP-CIDR,185.188.32.1/28,🎯 全球直连,no-resolve
